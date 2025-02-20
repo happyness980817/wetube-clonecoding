@@ -1,5 +1,7 @@
 # Wetube Reloaded
 
+### URL -> Page Roles
+
 / -> Home <br>
 /join -> Join <br>
 /login -> Login <br>
