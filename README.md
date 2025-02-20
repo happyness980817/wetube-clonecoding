@@ -1,15 +1,15 @@
 # Wetube Reloaded
 
-/ -> Home
-/join -> Join
-/login -> Login
-/search -> Search
+/ -> Home <br>
+/join -> Join <br>
+/login -> Login <br>
+/search -> Search <br>
 
-/users/edit -> Edit user
-/users/delete -> Delete user
+/users/edit -> Edit user <br>
+/users/delete -> Delete user <br>
 
-/videos/edit -> Watch Video
-/videos/edit -> Edit Video
-/videos/delete -> Delete Video
-/videos/comments -> Comment on a video
-/videos/comments/delete -> Delete a comment of a video
+/videos/edit -> Watch Video <br>
+/videos/edit -> Edit Video <br>
+/videos/delete -> Delete Video <br>
+/videos/comments -> Comment on a video <br>
+/videos/comments/delete -> Delete a comment of a video <br>
