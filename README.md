@@ -10,7 +10,7 @@
 /users/edit -> Edit user <br>
 /users/delete -> Delete user <br>
 
-/videos/edit -> Watch Video <br>
+/videos/watch -> Watch Video <br>
 /videos/edit -> Edit Video <br>
 /videos/delete -> Delete Video <br>
 /videos/comments -> Comment on a video <br>
