@@ -16,7 +16,8 @@
   },
   "homepage": "https://github.com/happyness980817/wetube-clonecoding#readme",
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.9",
