@@ -1,7 +1,9 @@
-extends base.pug
+extends base
+include mixins/video
 
 block content 
   h2 Trending Videos
-  ul 
-    each video in videos 
-      li=video
+    each item in videos 
+      +video(item)
+    else 
+      li Nothing Found
