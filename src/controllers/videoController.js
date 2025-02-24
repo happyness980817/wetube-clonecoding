@@ -37,5 +37,12 @@ export const getEdit = (req, res) => {
   const { id } = req.params;
   const video = videos[id - 1];
   return res.render("edit", { pageTitle: `Editing: ${video.title}`, video });
-}; // form 을 화면에 보여줌줌
-export const postEdit = (req, res) => {}; // 변경사항을 저장
+}; // form 을 화면에 보여줌
+export const postEdit = (req, res) => {
+  const { id } = req.params;
+  // console.log(req.body);
+  // console.log(req);
+  const { title } = req.body;
+  videos[id - 1].title = title; // 가짜 database 라 이렇게 한다. 나중에 바뀜.
+  return res.redirect(`/videos/${id}`);
+}; // 변경사항을 저장 (비디오 수정)
