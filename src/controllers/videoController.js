@@ -40,9 +40,25 @@ export const getEdit = (req, res) => {
 }; // form 을 화면에 보여줌
 export const postEdit = (req, res) => {
   const { id } = req.params;
-  // console.log(req.body);
+  // console.log(req.body); --> input="name" 이 없으면 req.body 에서 데이터를 볼 수 없다.
   // console.log(req);
   const { title } = req.body;
   videos[id - 1].title = title; // 가짜 database 라 이렇게 한다. 나중에 바뀜.
   return res.redirect(`/videos/${id}`);
 }; // 변경사항을 저장 (비디오 수정)
+export const getUpload = (req, res) => {
+  return res.render("upload", { pageTitle: "Upload Video" });
+};
+export const postUpload = (req, res) => {
+  // here we will add a video to the videos array
+  const newVideo = {
+    title: req.body.title,
+    rating: 5,
+    numOfcomments: 2,
+    createdAt: "Just Now",
+    views: 1,
+    id: videos.length + 1,
+  };
+  videos.push(newVideo);
+  return res.redirect("/");
+};
