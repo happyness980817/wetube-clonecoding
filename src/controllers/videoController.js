@@ -1,64 +1,20 @@
-let videos = [
-  {
-    title: "First Video",
-    rating: 5,
-    numOfcomments: 2,
-    createdAt: "Yesterday",
-    views: 1,
-    id: 1,
-  },
-  {
-    title: "Second Video",
-    rating: 5,
-    numOfcomments: 2,
-    createdAt: "Yesterday",
-    views: 59,
-    id: 2,
-  },
-  {
-    title: "Third Video",
-    rating: 5,
-    numOfcomments: 2,
-    createdAt: "Yesterday",
-    views: 59,
-    id: 3,
-  },
-];
+import Video from "../models/Video";
 
-export const trending = (req, res) => {
-  return res.render("home", { pageTitle: "Home", videos });
+export const home = (req, res) => {
+  Video.find({}, (error, videos) => {});
+  return res.render("home", { pageTitle: "Home" });
 };
 export const watch = (req, res) => {
-  const { id } = req.params; // const id = req.params.id;
-  const video = videos[id - 1];
-  return res.render("watch", { pageTitle: `Watching: ${video.title}`, video });
+  const { id } = req.params;
+  return res.render("watch", { pageTitle: `Watching` });
 };
 export const getEdit = (req, res) => {
   const { id } = req.params;
-  const video = videos[id - 1];
-  return res.render("edit", { pageTitle: `Editing: ${video.title}`, video });
-}; // form 을 화면에 보여줌
+  return res.render("edit", { pageTitle: `Editing` });
+};
 export const postEdit = (req, res) => {
   const { id } = req.params;
-  // console.log(req.body); --> input="name" 이 없으면 req.body 에서 데이터를 볼 수 없다.
-  // console.log(req);
   const { title } = req.body;
-  videos[id - 1].title = title; // 가짜 database 라 이렇게 한다. 나중에 바뀜.
+
   return res.redirect(`/videos/${id}`);
-}; // 변경사항을 저장 (비디오 수정)
-export const getUpload = (req, res) => {
-  return res.render("upload", { pageTitle: "Upload Video" });
-};
-export const postUpload = (req, res) => {
-  // here we will add a video to the videos array
-  const newVideo = {
-    title: req.body.title,
-    rating: 5,
-    numOfcomments: 2,
-    createdAt: "Just Now",
-    views: 1,
-    id: videos.length + 1,
-  };
-  videos.push(newVideo);
-  return res.redirect("/");
 };
