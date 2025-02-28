@@ -14,14 +14,14 @@ Video.find({}, (error, videos) => {
 export const home = async (req, res) => {
   console.log("start");
   const videos = await Video.find({}); // 데이터베이스에서 데이터를 읽어올 때까지 기다린다.
-  console.log(videos);
   console.log("finished");
   return res.render("home", { pageTitle: "Home", videos });
 };
 
-export const watch = (req, res) => {
+export const watch = async (req, res) => {
   const { id } = req.params;
-  return res.render("watch", { pageTitle: `Watching` });
+  const video = await Video.findById(id);
+  return res.render("watch", { pageTitle: video.title, video });
 };
 
 export const getEdit = (req, res) => {
