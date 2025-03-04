@@ -45,7 +45,7 @@ export const postEdit = async (req, res) => {
   await Video.findByIdAndUpdate(id, {
     title,
     description,
-    hashtags: hashtags.split(",").map((word) => (word.startsWith("#") ? word : `#${word}`)),
+    hashtags,
   });
   return res.redirect(`/videos/${id}`);
 };
