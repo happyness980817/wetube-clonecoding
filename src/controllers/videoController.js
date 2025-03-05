@@ -7,12 +7,12 @@ Video.find({}, (error, videos) => {
     return res.render("server-error");
   };
   return res.render("home", { pageTitle: "Home", videos });
-  });
-  console.log("finished");  --> start, finished, videos 순서로 출력
+});
+console.log("finished");  --> start, finished, videos 순서로 출력 (render 에 시간이 걸린다. Videos.find() 는 비동기적으로 처리 )
 */
 
 export const home = async (req, res) => {
-  const videos = await Video.find({}); // 데이터베이스에서 데이터를 읽어올 때까지 기다린다.
+  const videos = await Video.find({}).sort({ createdAt: "desc" }); // 데이터베이스에서 데이터를 읽어올 때까지 기다린다.
   return res.render("home", { pageTitle: "Home", videos });
 };
 
@@ -77,4 +77,10 @@ export const deleteVideo = async (req, res) => {
   await Video.findByIdAndDelete(id);
   // delete video
   return res.redirect("/");
+};
+
+export const search = (req, res) => {
+  const { keyword } = req.query;
+  console.log(keyword);
+  return res.render("search", { pageTitle: "Search" });
 };
