@@ -17,7 +17,9 @@
   "homepage": "https://github.com/happyness980817/wetube-clonecoding#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "connect-mongo": "^5.1.0",
     "express": "^4.21.2",
+    "express-session": "^1.18.1",
     "mongoose": "^8.10.2",
     "morgan": "^1.10.0",
     "pug": "^3.0.3"
