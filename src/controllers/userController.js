@@ -140,23 +140,32 @@ export const getEdit = (req, res) => {
 };
 export const postEdit = async (req, res) => {
   const {
-    session: {
-      user: { _id },
-    },
-    body: { name, email, username, location }, // 여기있는 username, email 이 session.user 에 있는애들이랑 다른지 확인해야 함.
+    session: { user },
+    body: { name, email, username, location },
   } = req;
 
-  const updatedUser = await User.findByIdAndUpdate(
-    _id,
-    {
-      name,
-      email,
-      username,
-      location,
-    },
-    { new: true }
-  );
-  req.session.user = updatedUser;
+  const { _id, username: currentUsername, email: currentEmail } = user;
+
+  const usernameExists = username !== currentUsername ? await User.exists({ username }) : false;
+  const emailExists = email !== currentEmail ? await User.exists({ email }) : false;
+
+  if (usernameExists || emailExists) {
+    return res.status(400).render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage: "This username or email is already taken.",
+    });
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(_id, { name, email, username, location }, { new: true });
+
+  req.session.user = {
+    ...user,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    username: updatedUser.username,
+    location: updatedUser.location,
+  };
+
   return res.redirect("/users/edit");
 };
 
