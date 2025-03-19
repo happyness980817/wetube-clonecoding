@@ -12,6 +12,8 @@ html(lang="ko")
             a(href="/") Home
           if loggedIn 
             li 
+              a(href="/videos/upload") Upload Video
+            li 
               a(href="/users/edit") Edit Profile 
             li 
               a(href="/users/logout") Log Out
@@ -22,8 +24,7 @@ html(lang="ko")
               a(href="/login") Log In 
           li 
             a(href="/search") Search Videos
-          li 
-            a(href="/videos/upload") Upload Videos
+          
     main
       block content
   include partials/footer
