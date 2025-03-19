@@ -143,7 +143,7 @@ export const postEdit = async (req, res) => {
     session: {
       user: { _id },
     },
-    body: { name, email, username, location },
+    body: { name, email, username, location }, // 여기있는 username, email 이 session.user 에 있는애들이랑 다른지 확인해야 함.
   } = req;
 
   const updatedUser = await User.findByIdAndUpdate(
