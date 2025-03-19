@@ -1,12 +1,13 @@
 import express from "express";
 import { logout, see, startGithubLogin, finishGithubLogin, getEdit, postEdit } from "../controllers/userController";
+import { protectorMiddleware, publicOnlyMiddleware } from "../middlewares";
 
 const userRouter = express.Router();
 
-userRouter.get("/logout", logout);
-userRouter.route("/edit").get(getEdit).post(postEdit);
-userRouter.get("/github/start", startGithubLogin);
-userRouter.get("/github/finish", finishGithubLogin);
+userRouter.get("/logout", protectorMiddleware, logout); // login 된 사람들만 logout page 로 연결
+userRouter.route("/edit").all(protectorMiddleware).get(getEdit).post(postEdit);
+userRouter.get("/github/start", publicOnlyMiddleware, startGithubLogin); //login 되어있으면 여기로 올 수 없다. "/" 로 redirect
+userRouter.get("/github/finish", publicOnlyMiddleware, finishGithubLogin);
 userRouter.get(":id", see);
 
 export default userRouter;
