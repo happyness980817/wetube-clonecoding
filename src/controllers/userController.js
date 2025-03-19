@@ -133,9 +133,21 @@ export const finishGithubLogin = async (req, res) => {
   }
 };
 
-export const edit = (req, res) => res.send("Edit User");
 export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
 };
+export const getEdit = (req, res) => {
+  return res.render("edit-profile", { pageTitle: "Edit Profile" });
+};
+export const postEdit = (req, res) => {
+  return res.render("edit-profile");
+};
+
 export const see = (req, res) => res.send("See User");
+
+// 내가 소셜로그인을 구현할 거라면...
+// 이메일로 가입했는데 소셜로그인으로 로그인하려 한다 -> "동일한 이메일로 등록된 계정이 존재합니다."
+
+// 맨 처음에 social login 으로 계정을 생성한 사람은 이메일로 로그인 불가능. password="" 로 설정되었으므로
+// 자동으로 로그인시켜주는게 편할수도 있는데 예상못한데서 꼬일까봐 뭔가 찝찝하다.
