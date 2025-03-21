@@ -30,6 +30,8 @@
     "@babel/core": "^7.26.9",
     "@babel/node": "^7.26.0",
     "@babel/preset-env": "^7.26.9",
-    "nodemon": "^3.1.9"
+    "@prettier/plugin-pug": "^3.2.1",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.5.3"
   }
 }

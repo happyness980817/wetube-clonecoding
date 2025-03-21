@@ -146,14 +146,22 @@ export const postEdit = async (req, res) => {
 
   const { _id, username: currentUsername, email: currentEmail } = user;
 
-  const usernameExists = username !== currentUsername ? await User.exists({ username }) : undefined;
-  const emailExists = email !== currentEmail ? await User.exists({ email }) : undefined;
+  const usernameExists = username !== currentUsername ? await User.exists({ username }) : false;
+  const emailExists = email !== currentEmail ? await User.exists({ email }) : false;
 
-  if (usernameExists || emailExists) {
+  if (usernameExists) {
     console.log("error");
     return res.status(400).render("edit-profile", {
       pageTitle: "Edit Profile",
-      errorMessage: "This username or email is already taken.",
+      errorMessage: "This username is already taken.",
+    });
+  }
+
+  if (emailExists) {
+    console.log("error");
+    return res.status(400).render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage: "This email is already taken.",
     });
   }
 
@@ -168,6 +176,17 @@ export const postEdit = async (req, res) => {
   };
 
   return res.redirect("/users/edit");
+};
+
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly === true) {
+    return res.redirect("/");
+  }
+  res.render("users/change-password", { pageTitle: "Change Password" });
+};
+
+export const postChangePassword = (req, res) => {
+  return res.redirect("/");
 };
 
 export const see = (req, res) => res.send("See User");
