@@ -142,9 +142,26 @@ export const postEdit = async (req, res) => {
   const {
     session: { user },
     body: { name, email, username, location },
+    file,
   } = req;
 
-  const { _id, username: currentUsername, email: currentEmail } = user;
+  /* 
+  const user = req.session.user;
+  const name = req.body.name;
+  const email = req.body.email;
+  const username = req.body.username;
+  const location = req.body.location;
+  const file = req.file;
+  */
+
+  const { _id, avatarUrl, username: currentUsername, email: currentEmail } = user;
+
+  /*  
+  const _id = user._id;
+  const avatarUrl = user.avatarUrl;
+  const currentUsername = user.username;
+  const currentEmail = user.email; 
+  */
 
   const usernameExists = username !== currentUsername ? await User.exists({ username }) : false;
   const emailExists = email !== currentEmail ? await User.exists({ email }) : false;
@@ -165,7 +182,17 @@ export const postEdit = async (req, res) => {
     });
   }
 
-  const updatedUser = await User.findByIdAndUpdate(_id, { name, email, username, location }, { new: true });
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      avatarUrl: file ? file.path : avatarUrl,
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
 
   req.session.user = {
     ...user,
