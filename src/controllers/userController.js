@@ -241,7 +241,17 @@ export const postChangePassword = async (req, res) => {
   return res.redirect("/users/logout");
 };
 
-export const see = (req, res) => res.send("See User");
+export const see = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) {
+    returnres.status(404).render("404", { pageTitle: "User not found." });
+  }
+  return res.render("users/profile", {
+    pageTitle: user.name,
+    user,
+  });
+};
 
 // 내가 소셜로그인을 구현할 거라면...
 // 이메일로 가입했는데 소셜로그인으로 로그인하려 한다 -> "동일한 이메일로 등록된 계정이 존재합니다."
