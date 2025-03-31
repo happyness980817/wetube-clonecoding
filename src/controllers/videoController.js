@@ -19,13 +19,24 @@ export const home = async (req, res) => {
 
 export const watch = async (req, res) => {
   const { id } = req.params;
-  const video = await Video.findById(id);
-  // console.log(video);
-  const owner = await User.findById(video.owner);
+  const video = await Video.findById(id).populate("owner");
+
+  /* populate
+  Mongoose에는 populate()를 통해 다른 컬렉션의 문서를 참조할 수 있습니다. 
+  Population은 문서의 지정된 경로를 다른 컬렉션의 문서로 자동 교체하는 프로세스입니다. 
+  단일 문서, 여러 문서, 일반 개체, 여러 일반 개체 또는 쿼리에서 반환된 모든 개체를 채울 수 있습니다.
+  const story = await Story.findOne({ title: 'Casino Royale' }).populate('author');
+  https://mongoosejs.com/docs/populate.html
+
+  Population
+  https://mongoosejs.com/docs/populate.html#population */
+
+  console.log(video);
+
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
   }
-  return res.render("watch", { pageTitle: video.title, video, owner });
+  return res.render("watch", { pageTitle: video.title, video });
 };
 
 export const getEdit = async (req, res) => {
