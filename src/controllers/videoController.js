@@ -22,16 +22,12 @@ export const watch = async (req, res) => {
   const video = await Video.findById(id).populate("owner");
 
   /* populate
-  Mongoose에는 populate()를 통해 다른 컬렉션의 문서를 참조할 수 있습니다. 
-  Population은 문서의 지정된 경로를 다른 컬렉션의 문서로 자동 교체하는 프로세스입니다. 
-  단일 문서, 여러 문서, 일반 개체, 여러 일반 개체 또는 쿼리에서 반환된 모든 개체를 채울 수 있습니다.
-  const story = await Story.findOne({ title: 'Casino Royale' }).populate('author');
-  https://mongoosejs.com/docs/populate.html
+  원래대로였으면 const owner 이렇게 해서 video 의 _id 를 가져오던지 했는데
+  populate 로 Video model 에 있는 
+  User model 과 연동된 진짜 user id object 를 가져올 수 있다. ("User" 를 refer)
+  */
 
-  Population
-  https://mongoosejs.com/docs/populate.html#population */
-
-  console.log(video);
+  console.log(video); // 출력해보면 video 에 owner 속성이 추가된 것을 확인
 
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
@@ -41,20 +37,32 @@ export const watch = async (req, res) => {
 
 export const getEdit = async (req, res) => {
   const { id } = req.params;
+  const {
+    user: { _id },
+  } = req.session;
   const video = await Video.findById(id);
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
+  }
+  if (String(video.owner) !== String(_id)) {
+    return res.status(403).redirect("/");
   }
   return res.render("edit", { pageTitle: `Edit <${video.title}>`, video });
 };
 
 export const postEdit = async (req, res) => {
+  const {
+    user: { _id },
+  } = req.session;
   const { id } = req.params;
   const { title, description, hashtags } = req.body;
   const video = await Video.exists({ _id: id }); // _id === req.params.id 인지 확인
 
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
+  }
+  if (String(video.owner) !== String(_id)) {
+    return res.status(403).redirect("/");
   }
   await Video.findByIdAndUpdate(id, {
     title,
@@ -75,13 +83,16 @@ export const postUpload = async (req, res) => {
   const { path: fileUrl } = req.file;
   const { title, description, hashtags } = req.body;
   try {
-    await Video.create({
+    const newVideo = await Video.create({
       title,
       description,
       fileUrl,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
+    const user = await User.findById(_id);
+    user.videos.push(newVideo._id);
+    await user.save();
     return res.redirect("/");
   } catch (error) {
     // console.log(error);
@@ -94,8 +105,25 @@ export const postUpload = async (req, res) => {
 
 export const deleteVideo = async (req, res) => {
   const { id } = req.params;
-  await Video.findByIdAndDelete(id);
-  // delete video
+  const {
+    user: { _id },
+  } = req.session;
+
+  const video = await Video.findById(id);
+  if (!video) {
+    return res.status(404).render("404", { pageTitle: "Video not found." });
+  }
+  if (String(video.owner) !== String(_id)) {
+    return res.status(403).redirect("/");
+  }
+
+  await Video.findByIdAndDelete(id); // 영상 삭제
+  const user = await User.findById(_id);
+  user.videos = user.videos.filter((videoId) => String(videoId) !== id);
+  // filter 내부에 callback 을 지정하면 콜백 내의 첫 번째 파라미터로 배열의 각 원소가 하나씩 전달, 순회
+  // Array.prototype.filter() 의 첫 번째 parameter 는 반드시 callback function
+  await user.save(); // 비동기 저장
+
   return res.redirect("/");
 };
 
