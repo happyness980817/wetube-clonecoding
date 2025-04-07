@@ -2,6 +2,8 @@ extends base
 
 block content  
   form(method="POST", enctype="multipart/form-data").edit-profile__form
+  if errorMessage 
+    span=errorMessage
     label(for="avatar") Avatar
     input(type="file", id="avatar", name="avatar", accept="image/*")
     input(placeholder="Name", name="name", type="text", required, value=loggedInUser.name)
