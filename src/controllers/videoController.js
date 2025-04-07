@@ -13,7 +13,7 @@ console.log("finished");  --> start, finished, videos 순서로 출력 (render �
 */
 
 export const home = async (req, res) => {
-  const videos = await Video.find({}).sort({ createdAt: "desc" }); // 데이터베이스에서 데이터를 읽어올 때까지 기다린다.
+  const videos = await Video.find({}).sort({ createdAt: "desc" }).populate("owner"); // 데이터베이스에서 데이터를 읽어올 때까지 기다린다.
   return res.render("home", { pageTitle: "Home", videos });
 };
 
@@ -135,7 +135,7 @@ export const search = async (req, res) => {
       title: {
         $regex: new RegExp(keyword, "i"), // searches for words that contain keyword variable
       },
-    });
+    }).populate("owner");
   }
   return res.render("search", { pageTitle: "Search", videos });
 };

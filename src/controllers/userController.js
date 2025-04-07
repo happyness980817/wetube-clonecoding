@@ -246,6 +246,10 @@ export const see = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id).populate({
     path: "videos",
+    populate: {
+      path: "owner",
+      model: "User",
+    },
     options: {
       sort: { createdAt: -1 }, // 최신순 정렬
     },
