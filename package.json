@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "youtube clonecoding",
   "scripts": {
-    "server": "nodemon",
+    "dev": "nodemon",
     "assets": "webpack --config webpack.config.js"
   },
   "repository": {
