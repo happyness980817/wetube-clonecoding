@@ -48,11 +48,25 @@ const handleVolumeChange = (event) => {
 };
 
 const handleLoadedMetadata = () => {
-  totalTime.innerText = Math.floor(video.duration);
+  totalTime.innerText = formatTime(video.duration);
 };
 
 const handleTimeUpdate = () => {
-  currentTime.innerText = Math.floor(video.currentTime);
+  currentTime.innerText = formatTime(video.currentTime);
+};
+
+const formatTime = (seconds) => {
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
+
+  if (hrs > 0) {
+    // 시간이 있을 때는 "HH:MM:SS" 형태로 표시
+    return `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  } else {
+    // 한 시간이 안되는 경우 "MM:SS" 형태로 표시
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  }
 };
 
 playBtn.addEventListener("click", handlePlayClick);
@@ -60,3 +74,4 @@ muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
+video.addEventListener("ended", () => (playBtn.innerText = "Play"));
