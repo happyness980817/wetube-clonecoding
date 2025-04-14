@@ -4,6 +4,9 @@ const muteBtn = document.getElementById("mute");
 const volumeRange = document.getElementById("volume");
 const currentTime = document.getElementById("currentTime");
 const totalTime = document.getElementById("totalTime");
+const timeline = document.getElementById("timeline");
+const fullScreenBtn = document.getElementById("fullScreen");
+const videoContainer = document.getElementById("videoContainer");
 
 let volumeValue = 0.5;
 video.volume = volumeValue;
@@ -49,10 +52,12 @@ const handleVolumeChange = (event) => {
 
 const handleLoadedMetadata = () => {
   totalTime.innerText = formatTime(video.duration);
+  timeline.max = Math.floor(video.duration);
 };
 
 const handleTimeUpdate = () => {
   currentTime.innerText = formatTime(video.currentTime);
+  timeline.value = Math.floor(video.currentTime);
 };
 
 const formatTime = (seconds) => {
@@ -69,9 +74,45 @@ const formatTime = (seconds) => {
   }
 };
 
+const handleTimelineChange = (event) => {
+  const {
+    target: { value },
+  } = event;
+  video.currentTime = value;
+};
+
+const handleFullScreen = () => {
+  const fullscreen = document.fullscreenElement;
+  if (!fullscreen) {
+    videoContainer.requestFullscreen();
+    fullScreenBtn.innerText = "Exit Full Screen";
+  } else {
+    document.exitFullscreen();
+    fullScreenBtn.innerText = "Full Screen";
+  }
+};
+
+const handleFullScreenChange = () => {
+  fullScreenBtn.innerText = document.fullscreenElement ? "Exit Full Screen" : "Full Screen";
+};
+
+const handleWindowResize = () => {
+  // F11 등 브라우저 전체화면 진입 시 창의 크기가 화면 크기와 동일하면 전체화면 모드로 간주
+  if (window.innerHeight === screen.height && window.innerWidth === screen.width) {
+    fullScreenBtn.innerText = "Exit Full Screen";
+  } else {
+    fullScreenBtn.innerText = "Full Screen";
+  }
+};
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
 video.addEventListener("ended", () => (playBtn.innerText = "Play"));
+timeline.addEventListener("input", handleTimelineChange);
+fullScreenBtn.addEventListener("click", handleFullScreen);
+videoContainer.addEventListener("fullscreenchange", handleFullScreenChange);
+
+window.addEventListener("resize", handleWindowResize);
