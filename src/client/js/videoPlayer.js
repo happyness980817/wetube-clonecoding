@@ -1,11 +1,14 @@
 const video = document.querySelector("video");
 const playBtn = document.getElementById("play");
+const playBtnIcon = playBtn.querySelector("i");
 const muteBtn = document.getElementById("mute");
+const muteBtnIcon = muteBtn.querySelector("i");
 const volumeRange = document.getElementById("volume");
 const currentTime = document.getElementById("currentTime");
 const totalTime = document.getElementById("totalTime");
 const timeline = document.getElementById("timeline");
 const fullScreenBtn = document.getElementById("fullScreen");
+const fullScreenIcon = fullScreenBtn.querySelector("i");
 const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
 
@@ -13,7 +16,7 @@ const videoControls = document.getElementById("videoControls");
 let controlsMovementTimeout = null;
 let volumeValue = 0.5;
 video.volume = volumeValue;
-// volumeRange.value = volumeValue;
+volumeRange.value = volumeValue;
 
 const handlePlayClick = (e) => {
   if (video.paused) {
@@ -21,7 +24,7 @@ const handlePlayClick = (e) => {
   } else {
     video.pause();
   }
-  playBtn.innerText = video.paused ? "Play" : "Pause";
+  playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause";
 };
 
 const handleMuteClick = (e) => {
@@ -34,7 +37,7 @@ const handleMuteClick = (e) => {
   } else {
     video.muted = true;
   }
-  muteBtn.innerText = video.muted ? "Unmute" : "Mute";
+  muteBtnIcon.classList = video.muted ? "fas fa-volume-mute" : "fas fa-volume-up";
   volumeRange.value = video.muted ? 0 : volumeValue;
 };
 
@@ -44,10 +47,10 @@ const handleVolumeChange = (event) => {
   } = event;
   if (Number(value) !== 0) {
     video.muted = false;
-    muteBtn.innerText = "Mute";
+    muteBtnIcon.classList = "fas fa-volume-up";
   } else {
     video.muted = true;
-    muteBtn.innerText = "Unmute";
+    muteBtnIcon.classList = "fas fa-volume-mute";
   }
   volumeValue = value;
   video.volume = value;
@@ -88,23 +91,23 @@ const handleFullScreen = () => {
   const fullscreen = document.fullscreenElement;
   if (!fullscreen) {
     videoContainer.requestFullscreen();
-    fullScreenBtn.innerText = "Exit Full Screen";
+    fullScreenIcon.classList = "fas fa-compress";
   } else {
     document.exitFullscreen();
-    fullScreenBtn.innerText = "Full Screen";
+    fullScreenIcon.classList = "fas fa-expand";
   }
 };
 
 const handleFullScreenChange = () => {
-  fullScreenBtn.innerText = document.fullscreenElement ? "Exit Full Screen" : "Full Screen";
+  fullScreenIcon.classList = document.fullscreenElement ? "fas fa-compress" : "fas fa-expand";
 };
 
 const handleWindowResize = () => {
   // F11 등 브라우저 전체화면 진입 시 창의 크기가 화면 크기와 동일하면 전체화면 모드로 간주
   if (window.innerHeight === screen.height && window.innerWidth === screen.width) {
-    fullScreenBtn.innerText = "Exit Full Screen";
+    fullScreenIcon.classList = "fas fa-compress";
   } else {
-    fullScreenBtn.innerText = "Full Screen";
+    fullScreenIcon.classList = "fas fa-expand";
   }
 };
 
@@ -117,10 +120,6 @@ const handleMouseMove = () => {
   controlsMovementTimeout = setTimeout(hideControls, 3000);
 };
 
-const handleMouseLeave = () => {
-  videoControls.classList.remove("showing");
-};
-
 const hideControls = () => videoControls.classList.remove("showing");
 
 playBtn.addEventListener("click", handlePlayClick);
@@ -128,12 +127,12 @@ muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
-video.addEventListener("ended", () => (playBtn.innerText = "Play"));
+video.addEventListener("ended", () => (playBtnIcon.classList = "fas fa-play"));
 timeline.addEventListener("input", handleTimelineChange);
 
 fullScreenBtn.addEventListener("click", handleFullScreen);
 videoContainer.addEventListener("fullscreenchange", handleFullScreenChange);
 window.addEventListener("resize", handleWindowResize);
 
-video.addEventListener("mousemove", handleMouseMove);
-video.addEventListener("mouseleave", handleMouseLeave);
+videoContainer.addEventListener("mousemove", handleMouseMove);
+videoContainer.addEventListener("mouseleave", hideControls);

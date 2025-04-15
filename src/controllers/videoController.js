@@ -27,7 +27,7 @@ export const watch = async (req, res) => {
   User model 과 연동된 진짜 user id object 를 가져올 수 있다. ("User" 를 refer)
   */
 
-  console.log(video); // 출력해보면 video 에 owner 속성이 추가된 것을 확인
+  // console.log(video); // 출력해보면 video 에 owner 속성이 추가된 것을 확인
 
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
