@@ -27,6 +27,13 @@ const handlePlayClick = (e) => {
   playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause";
 };
 
+const handleKeydown = (event) => {
+  if (event.code === "Space") {
+    handlePlayClick();
+    event.preventDefault();
+  }
+};
+
 const handleMuteClick = (e) => {
   if (video.muted) {
     if (Number(volumeValue) === 0) {
@@ -125,9 +132,13 @@ const hideControls = () => videoControls.classList.remove("showing");
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
+
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
 video.addEventListener("ended", () => (playBtnIcon.classList = "fas fa-play"));
+video.addEventListener("click", handlePlayClick);
+document.addEventListener("keydown", handleKeydown);
+
 timeline.addEventListener("input", handleTimelineChange);
 
 fullScreenBtn.addEventListener("click", handleFullScreen);
