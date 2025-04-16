@@ -118,6 +118,8 @@ const handleWindowResize = () => {
   }
 };
 
+const hideControls = () => videoControls.classList.remove("showing");
+
 const handleMouseMove = () => {
   if (controlsMovementTimeout) {
     clearTimeout(controlsMovementTimeout);
@@ -127,19 +129,26 @@ const handleMouseMove = () => {
   controlsMovementTimeout = setTimeout(hideControls, 3000);
 };
 
-const hideControls = () => videoControls.classList.remove("showing");
+const handleEnded = () => {
+  const { id } = videoContainer.dataset;
+  fetch(`/api/videos/${id}/view`, {
+    method: "POST",
+  });
+  playBtnIcon.classList = "fas fa-play";
+};
 
 playBtn.addEventListener("click", handlePlayClick);
+video.addEventListener("ended", handleEnded);
+video.addEventListener("click", handlePlayClick);
+document.addEventListener("keydown", handleKeydown);
+
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
-video.addEventListener("ended", () => (playBtnIcon.classList = "fas fa-play"));
-video.addEventListener("click", handlePlayClick);
-document.addEventListener("keydown", handleKeydown);
-
 timeline.addEventListener("input", handleTimelineChange);
+video.addEventListener("ended", handleEnded);
 
 fullScreenBtn.addEventListener("click", handleFullScreen);
 videoContainer.addEventListener("fullscreenchange", handleFullScreenChange);
