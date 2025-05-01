@@ -1,6 +1,7 @@
 const { watch } = require("fs");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
+const { experiments } = require("webpack");
 
 module.exports = {
   entry: {
@@ -38,4 +39,5 @@ module.exports = {
       },
     ],
   },
+  experiments: { asyncWebAssembly: true },
 };

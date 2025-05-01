@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/happyness980817/wetube-clonecoding#readme",
   "dependencies": {
+    "@ffmpeg/core": "^0.8.5",
+    "@ffmpeg/ffmpeg": "^0.9.7",
     "bcrypt": "^5.1.1",
     "connect-mongo": "^5.1.0",
     "dotenv": "^16.4.7",
