@@ -13,7 +13,9 @@ console.log("finished");  --> start, finished, videos 순서로 출력 (render �
 */
 
 export const home = async (req, res) => {
-  const videos = await Video.find({}).sort({ createdAt: "desc" }).populate("owner"); // 데이터베이스에서 데이터를 읽어올 때까지 기다린다.
+  const videos = await Video.find({})
+    .sort({ createdAt: "desc" })
+    .populate("owner"); // 데이터베이스에서 데이터를 읽어올 때까지 기다린다.
   return res.render("home", { pageTitle: "Home", videos });
 };
 
@@ -80,13 +82,14 @@ export const postUpload = async (req, res) => {
   const {
     user: { _id },
   } = req.session; // const _id = req.session.user._id;
-  const { path: fileUrl } = req.file;
+  const { video, thumb } = req.files;
   const { title, description, hashtags } = req.body;
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl,
+      fileUrl: video[0].path,
+      thumbUrl: thumb[0].path.replace(/[\\]/g, "/"),
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
