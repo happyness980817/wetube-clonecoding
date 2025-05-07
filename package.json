@@ -23,6 +23,7 @@
     "connect-mongo": "^5.1.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "express-flash": "^0.0.2",
     "express-session": "^1.18.1",
     "mongoose": "^8.10.2",
     "morgan": "^1.10.0",

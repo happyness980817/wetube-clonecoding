@@ -38,7 +38,8 @@ export const postJoin = async (req, res) => {
   }
 };
 
-export const getLogin = (req, res) => res.render("login", { pageTitle: "LogIn" });
+export const getLogin = (req, res) =>
+  res.render("login", { pageTitle: "LogIn" });
 
 export const postLogin = async (req, res) => {
   const { username, password } = req.body;
@@ -108,7 +109,9 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
-    const emailObj = emailData.find((email) => email.primary === true && email.verified === true);
+    const emailObj = emailData.find(
+      (email) => email.primary === true && email.verified === true
+    );
     if (!emailObj) {
       return res.redirect("/login");
     }
@@ -134,6 +137,7 @@ export const finishGithubLogin = async (req, res) => {
 
 export const logout = (req, res) => {
   req.session.destroy();
+  req.flash("info", "Logged Out.");
   return res.redirect("/");
 };
 export const getEdit = (req, res) => {
@@ -155,7 +159,12 @@ export const postEdit = async (req, res) => {
   const file = req.file;
   */
 
-  const { _id, avatarUrl, username: currentUsername, email: currentEmail } = user;
+  const {
+    _id,
+    avatarUrl,
+    username: currentUsername,
+    email: currentEmail,
+  } = user;
 
   /*  
   const _id = user._id;
@@ -164,8 +173,10 @@ export const postEdit = async (req, res) => {
   const currentEmail = user.email; 
   */
 
-  const usernameExists = username !== currentUsername ? await User.exists({ username }) : false;
-  const emailExists = email !== currentEmail ? await User.exists({ email }) : false;
+  const usernameExists =
+    username !== currentUsername ? await User.exists({ username }) : false;
+  const emailExists =
+    email !== currentEmail ? await User.exists({ email }) : false;
 
   if (usernameExists) {
     console.log("error");
@@ -209,6 +220,7 @@ export const postEdit = async (req, res) => {
 
 export const getChangePassword = (req, res) => {
   if (req.session.user.socialOnly === true) {
+    req.flash("error", "Social Users do not have passwords.");
     return res.redirect("/");
   }
   return res.render("users/change-password", { pageTitle: "Change Password" });
@@ -239,6 +251,7 @@ export const postChangePassword = async (req, res) => {
   await user.save();
   req.session.user.password = user.password; // 이 부분이 없으면, 비밀번호를 한번 바꾸고 다시 바꾸려 할 때, 세션에는 새로 변경된 비밀번호 정보가 없기 때문에 does not match 오류 발생.
   // 원래는 logout 시키면 session 이 destroy 되어서 필요가 없는데, server.js 파일에서 session data 를 db 에 저장해서 불러오므로 이 코드 필요.
+  req.flash("info", "Password Updated.");
   return res.redirect("/users/logout");
 };
 

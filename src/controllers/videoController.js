@@ -47,6 +47,7 @@ export const getEdit = async (req, res) => {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
   if (String(video.owner) !== String(_id)) {
+    req.flash("error", "Not Authorized.");
     return res.status(403).redirect("/");
   }
   return res.render("edit", { pageTitle: `Edit <${video.title}>`, video });
@@ -64,6 +65,7 @@ export const postEdit = async (req, res) => {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
   if (String(video.owner) !== String(_id)) {
+    req.flash("error", "You are not the owner of this video.");
     return res.status(403).redirect("/");
   }
   await Video.findByIdAndUpdate(id, {
@@ -117,10 +119,11 @@ export const deleteVideo = async (req, res) => {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
   if (String(video.owner) !== String(_id)) {
+    req.flash("error", "You are not the owner of this video.");
     return res.status(403).redirect("/");
   }
 
-  await Video.findByIdAndDelete(id); // 영상 삭제
+  await Video.findByIdAndDelete(id); // 영상을 db 에서도 삭제
   const user = await User.findById(_id);
   user.videos = user.videos.filter((videoId) => String(videoId) !== id);
   // filter 내부에 callback 을 지정하면 콜백 내의 첫 번째 파라미터로 배열의 각 원소가 하나씩 전달, 순회
