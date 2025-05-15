@@ -5,8 +5,17 @@ const btn = form.querySelector("button");
 
 const handleSubmit = (event) => {
   event.preventDefault();
+  const textarea = form.querySelector("textarea");
   const text = textarea.value;
-  const video = videoContainer.dataset.id;
+  const videoId = videoContainer.dataset.id;
+  fetch(`/api/videos/${videoId}/comment`, {
+    method: "POST",
+    body: {
+      text,
+    }, // 'body' means 'req.body'
+  });
 };
 
-form.addEventListener("submit", handleSubmit);
+if (form) {
+  form.addEventListener("submit", handleSubmit);
+}
