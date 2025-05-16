@@ -28,7 +28,11 @@ const handlePlayClick = (e) => {
 };
 
 const handleKeydown = (event) => {
-  if (event.code === "Space") {
+  const focusElement = document.activeElement;
+  if (
+    event.code === "Space" &&
+    focusElement !== document.querySelector("textarea")
+  ) {
     handlePlayClick();
     event.preventDefault();
   }
@@ -44,7 +48,9 @@ const handleMuteClick = (e) => {
   } else {
     video.muted = true;
   }
-  muteBtnIcon.classList = video.muted ? "fas fa-volume-mute" : "fas fa-volume-up";
+  muteBtnIcon.classList = video.muted
+    ? "fas fa-volume-mute"
+    : "fas fa-volume-up";
   volumeRange.value = video.muted ? 0 : volumeValue;
 };
 
@@ -106,12 +112,17 @@ const handleFullScreen = () => {
 };
 
 const handleFullScreenChange = () => {
-  fullScreenIcon.classList = document.fullscreenElement ? "fas fa-compress" : "fas fa-expand";
+  fullScreenIcon.classList = document.fullscreenElement
+    ? "fas fa-compress"
+    : "fas fa-expand";
 };
 
 const handleWindowResize = () => {
   // F11 등 브라우저 전체화면 진입 시 창의 크기가 화면 크기와 동일하면 전체화면 모드로 간주
-  if (window.innerHeight === screen.height && window.innerWidth === screen.width) {
+  if (
+    window.innerHeight === screen.height &&
+    window.innerWidth === screen.width
+  ) {
     fullScreenIcon.classList = "fas fa-compress";
   } else {
     fullScreenIcon.classList = "fas fa-expand";
