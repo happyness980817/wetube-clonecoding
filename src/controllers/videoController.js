@@ -1,4 +1,5 @@
 import Video from "../models/Video";
+import Comment from "../models/Comment";
 import User from "../models/User";
 
 /* 
@@ -21,7 +22,7 @@ export const home = async (req, res) => {
 
 export const watch = async (req, res) => {
   const { id } = req.params;
-  const video = await Video.findById(id).populate("owner");
+  const video = await Video.findById(id).populate("owner").populate("comments");
 
   /* populate
   원래대로였으면 const owner 이렇게 해서 video 의 _id 를 가져오던지 했는데
@@ -158,7 +159,22 @@ export const registerView = async (req, res) => {
   return res.sendStatus(200);
 };
 
-export const createComment = (req, res) => {
-  console.log(req.body);
-  console.log(req.body.text);
+export const createComment = async (req, res) => {
+  const {
+    session: { user },
+    body: { text },
+    params: { id },
+  } = req;
+  const video = await Video.findById(id);
+  if (!video) {
+    return res.sendStatus(404);
+  }
+  const comment = await Comment.create({
+    text,
+    owner: user._id,
+    video: id,
+  });
+  video.comments.push(comment._id);
+  await video.save();
+  return res.sendStatus(201);
 };
