@@ -2,6 +2,7 @@ const videoContainer = document.getElementById("videoContainer");
 const form = document.getElementById("commentForm");
 const textarea = form.querySelector("textarea");
 const btn = form.querySelector("button");
+const deleteCommentBtn = document.getElementById("delete__comment");
 
 const addComment = (text) => {
   const videoComments = document.querySelector(".video__comments ul");
@@ -37,6 +38,28 @@ const handleSubmit = async (event) => {
   }
 };
 
+const deleteComment = async (commentId, btn) => {
+  const res = await fetch(`/api/comments/${commentId}`, {
+    method: "DELETE",
+  });
+  if (res.status === 200) {
+    const li = btn.closest("li.video__comment");
+    li && li.remove();
+  } else {
+    console.error("댓글 삭제 실패", await res.text());
+  }
+};
+
+const initDeleteButtons = () => {
+  const deleteBtns = document.querySelectorAll(".delete__comment");
+  deleteBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const commentId = btn.dataset.id;
+      deleteComment(commentId, btn);
+    });
+  });
+};
+
 if (form) {
   form.addEventListener("submit", handleSubmit);
   // ② textarea 에 keydown 리스너 추가
@@ -46,4 +69,5 @@ if (form) {
       handleSubmit(e);
     }
   });
+  initDeleteButtons();
 }

@@ -178,3 +178,18 @@ export const createComment = async (req, res) => {
   await video.save();
   return res.sendStatus(201);
 };
+
+export const deleteComment = async (req, res) => {
+  const { id } = req.params; // comment ID
+  const comment = await Comment.findById(id);
+  if (!comment) {
+    return res.sendStatus(404);
+  }
+  // 1) 댓글 삭제
+  await Comment.findByIdAndDelete(id);
+  // 2) 해당 댓글을 소유한 비디오 문서에서 comments 배열에서 제거
+  await Video.findByIdAndUpdate(comment.video, {
+    $pull: { comments: id },
+  });
+  return res.sendStatus(200);
+};

@@ -39,6 +39,8 @@ block content
         li.video__comment
           i.fas.fa-comment
           span #{comment.text}
+          if String(video.owner._id) === String(loggedInUser._id)
+            span.delete__comment(data-id=comment._id) ❌
 
 block scripts
   script(src="/static/js/videoPlayer.js")
