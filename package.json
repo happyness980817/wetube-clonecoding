@@ -4,7 +4,11 @@
   "description": "youtube clonecoding",
   "scripts": {
     "dev": "nodemon",
-    "assets": "webpack --config webpack.config.js"
+    "assets": "webpack --mode=development --watch",
+    "build:server": "babel src -d dist --ignore src/client",
+    "build:assets": "webpack --mode=production",
+    "build": "npm run build:server && npm run build:assets",
+    "start": "node dist/init.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +21,8 @@
   },
   "homepage": "https://github.com/happyness980817/wetube-clonecoding#readme",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.812.0",
+    "@babel/cli": "^7.27.2",
     "@ffmpeg/core": "^0.8.5",
     "@ffmpeg/ffmpeg": "^0.9.7",
     "bcrypt": "^5.1.1",
@@ -28,6 +34,7 @@
     "mongoose": "^8.10.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.2",
+    "multer-s3": "^3.0.1",
     "node-fetch": "^3.3.2",
     "pug": "^3.0.3"
   },
@@ -35,6 +42,7 @@
     "@babel/core": "^7.26.9",
     "@babel/node": "^7.26.0",
     "@babel/preset-env": "^7.26.9",
+    "@flydotio/dockerfile": "^0.7.10",
     "@prettier/plugin-pug": "^3.2.1",
     "babel-loader": "^10.0.0",
     "css-loader": "^7.1.2",
