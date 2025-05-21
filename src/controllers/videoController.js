@@ -87,13 +87,15 @@ export const postUpload = async (req, res) => {
     user: { _id },
   } = req.session; // const _id = req.session.user._id;
   const { video, thumb } = req.files;
+  console.log("Video file:", video[0]); // 파일 정보 확인
+  console.log("Thumbnail file:", thumb[0]); // 파일 정보 확인
   const { title, description, hashtags } = req.body;
   try {
     const newVideo = await Video.create({
       title,
       description,
       fileUrl: video[0].location,
-      thumbUrl: thumb[0].location.replace(/[\\]/g, "/"),
+      thumbUrl: thumb[0].location,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });

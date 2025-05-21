@@ -10,10 +10,28 @@ const s3Client = new S3Client({
   },
 });
 
-const s3Storage = multerS3({
+const s3VideoStorage = multerS3({
   s3: s3Client,
-  bucket: "wetube_api_key_for_my_deepweb",
+  bucket: "wetube-this-is-not-a-deepweb-for-modakbull",
   acl: "public-read",
+  contentType: multerS3.AUTO_CONTENT_TYPE,
+  key: function (req, file, cb) {
+    const fileExtension = file.mimetype.split("/")[1];
+    const fileName = `videos/${req.session.user._id}/${Date.now()}.${fileExtension}`;
+    cb(null, fileName);
+  },
+});
+
+const s3AvatarStorage = multerS3({
+  s3: s3Client,
+  bucket: "wetube-this-is-not-a-deepweb-for-modakbull",
+  acl: "public-read",
+  contentType: multerS3.AUTO_CONTENT_TYPE,
+  key: function (req, file, cb) {
+    const fileExtension = file.mimetype.split("/")[1];
+    const fileName = `avatars/${req.session.user._id}/${Date.now()}.${fileExtension}`;
+    cb(null, fileName);
+  },
 });
 
 export const localsMiddleware = (req, res, next) => {
@@ -45,11 +63,11 @@ export const avatarUpload = multer({
   limits: {
     fileSize: 30000000,
   },
-  storage: s3Storage,
+  storage: s3AvatarStorage,
 });
 export const videoUpload = multer({
   limits: {
     fileSize: 100000000,
-    storage: s3Storage,
   },
+  storage: s3VideoStorage,
 });

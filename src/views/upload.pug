@@ -2,15 +2,15 @@ extends base.pug
 
 block content 
   div 
-    video#preview
+    video#preview(crossorigin="anonymous")
     button#actionBtn Start Recording
   if errorMessage 
     span=errorMessage 
-  form(method="POST" enctype="multipart/form-data")
+  form(method="POST" enctype="multipart/form-data" crossorigin="anonymous")
     label(for="video") Video File 
-    input(type="file" accept="video/*", required, id="video" name="video")
+    input(type="file" accept="video/*", required, id="video" name="video" crossorigin="anonymous")
     label(for="thumb") Thumbnail File 
-    input(type="file" accept="image/*", required, id="thumb" name="thumb")
+    input(type="file" accept="image/*", required, id="thumb" name="thumb" crossorigin="anonymous")
     input(placeholder="Title", required, type="text" name="title", maxlength=80)
     input(placeholder="Description", required, type="text" name="description", minlength=2)
     input(placeholder="Hashtags, separated by comma.", required, type="text" name="hashtags")

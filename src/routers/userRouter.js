@@ -29,7 +29,7 @@ userRouter
   .post(postChangePassword);
 userRouter.get("/github/start", publicOnlyMiddleware, startGithubLogin); //login 되어있으면 여기로 올 수 없다. "/" 로 redirect
 userRouter.get("/github/finish", publicOnlyMiddleware, finishGithubLogin);
-userRouter.get("/:id", see);
 userRouter.get("/logout", protectorMiddleware, logout); // login 된 사람들만 logout page 로 연결
+userRouter.get("/:id([0-9a-f]{24})", see);
 
 export default userRouter;
