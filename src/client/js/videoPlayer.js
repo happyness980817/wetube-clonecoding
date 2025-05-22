@@ -117,18 +117,6 @@ const handleFullScreenChange = () => {
     : "fas fa-expand";
 };
 
-const handleWindowResize = () => {
-  // F11 등 브라우저 전체화면 진입 시 창의 크기가 화면 크기와 동일하면 전체화면 모드로 간주
-  if (
-    window.innerHeight === screen.height &&
-    window.innerWidth === screen.width
-  ) {
-    fullScreenIcon.classList = "fas fa-compress";
-  } else {
-    fullScreenIcon.classList = "fas fa-expand";
-  }
-};
-
 const hideControls = () => videoControls.classList.remove("showing");
 
 const handleMouseMove = () => {
@@ -157,13 +145,18 @@ muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
+video.addEventListener("loadeddata", handleLoadedMetadata);
+
 video.addEventListener("timeupdate", handleTimeUpdate);
 timeline.addEventListener("input", handleTimelineChange);
 video.addEventListener("ended", handleEnded);
 
 fullScreenBtn.addEventListener("click", handleFullScreen);
 videoContainer.addEventListener("fullscreenchange", handleFullScreenChange);
-window.addEventListener("resize", handleWindowResize);
 
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", hideControls);
+
+if (video.readyState >= 1) {
+  handleLoadedMetadata();
+}
